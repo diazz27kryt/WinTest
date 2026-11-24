@@ -1,0 +1,23 @@
+name: Import WinLaunch-app into WinTest
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  mirror-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Mirror the complete source repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git clone --bare https://github.com/diazz27kryt/WinLaunch-app.git source.git
+          git -C source.git push --mirror "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
